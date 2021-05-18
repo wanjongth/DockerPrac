@@ -1,0 +1,8 @@
+version: "3"
+services:
+  redis-server:
+    image: "redis"
+  node-app:
+    build: . #현재 디렉터리
+    ports:
+      - "8080:8080" # 로컬 / 컨테이너 포트
