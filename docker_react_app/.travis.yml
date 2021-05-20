@@ -1,0 +1,29 @@
+sudo: required # 관리자 권한
+
+language: generic # 언어(플랫폼)
+
+services:
+  - docker # 환경 구성
+
+before_install: # 스크립트 실행 환경 구성
+  - echo "start Creating an image with dockerfile"
+  - docker build -t infinity4869/docker_react_app -f Dockerfile.dev .
+
+script: # 실행할 스크립트
+  - docker run -e CI=true infinity4869/docker_react_app npm run test -- --coverage
+# after_success: # 성공 후
+#   - echo "Test Success"
+
+deploy: # 배포환경
+  provider: elasticbeanstalk # 외부 서비스 표시(s3, elasticbeanstalk ..)
+  region: "ap-northeast-2" # 현재 사용하고 있는 AWS의 서비스가 위치하고 있는 물리적 장소
+  app: "docker-react-app" # 생성된 어플리케이션 이름
+  env: "Dockerreactapp-env-1" # 환경 이름
+  bucket_name: "elasticbeanstalk-ap-northeast-2-691239920782" #S3 버킷 네임 -> travis에서 소스 압축해서 S3로 보냄
+  bucket_path: "docker_react_app" #어플리케이션 이름과 동일
+  on:
+    branch: main # github branch
+
+  # travis CI dashboard에 등록
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
