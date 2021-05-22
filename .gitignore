@@ -1,5 +1,7 @@
 doc
 
+docker_fullstack/mysql/mysql_data/
+
 # dependencies
 /node_modules
 /.pnp
